@@ -31,17 +31,19 @@ WORKDIR /workdir
 
 # Copy the real files
 COPY client/ ./client/
-COPY nousflash/agent/ ./agent/
-COPY run.sh ./
-COPY timerelease.sh ./
-
 WORKDIR client/
 RUN cargo build --release
 WORKDIR /workdir
+
+COPY nousflash-agents/agent/ ./agent/
+COPY run.sh ./
+COPY refresh.sh ./
+COPY run.py ./
 
 COPY scripts/ ./scripts/
 
 RUN mkdir -p /data
 
 ENTRYPOINT [ ]
-CMD [ "bash", "run.sh" ]
+# CMD [ "bash", "run.sh" ]
+CMD [ "python3", "run.py" ]

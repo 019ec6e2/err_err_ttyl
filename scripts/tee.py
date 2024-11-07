@@ -13,9 +13,9 @@ import json
 
 # load_dotenv()
 
-TWITTER_ACCOUNT=os.getenv("TWITTER_ACCOUNT")
+TWITTER_ACCOUNT=os.getenv("X_USERNAME")
 if not TWITTER_ACCOUNT:
-    raise ValueError("TWITTER_ACCOUNT not found in .env file")
+    raise ValueError("X_USERNAME not found in .env file")
 
 
 BASE_URL = "http://127.0.0.1:3000"
@@ -23,9 +23,9 @@ REGISTER_OR_LOGIN_ENDPOINT = f"{BASE_URL}/login"
 CALLBACK_ENDPOINT = f"{BASE_URL}/callback"
 
 
-PASSWORD = os.getenv("TWITTER_PASSWORD")
+PASSWORD = os.getenv("X_PASSWORD")
 if not PASSWORD:
-    raise ValueError("TWITTER_PASSWORD not found in .env file")
+    raise ValueError("X_PASSWORD not found in .env file")
 X_EMAIL = os.getenv("X_EMAIL")
 if not X_EMAIL:
     raise ValueError("X_EMAIL not found in .env file")
@@ -60,9 +60,9 @@ input_field = WebDriverWait(driver, 10).until(
     )
 )
 
-if input_field.get_attribute('autocomplete') == 'on':
+if not input_field.get_attribute('name') == 'password':
     # Handle email field
-    print("Found email field", sys.stderr)
+    print("Found email field", file=sys.stderr)
     input_field.send_keys(X_EMAIL)
     input_field.send_keys(Keys.ENTER)
     time.sleep(1)
@@ -78,6 +78,7 @@ input_field.send_keys(PASSWORD)
 input_field.send_keys(Keys.ENTER)
 
 time.sleep(5)
+
 ct0 = driver.get_cookie("ct0")["value"]
 auth_token = driver.get_cookie("auth_token")["value"]
 with open('cookies.env','w') as f:
